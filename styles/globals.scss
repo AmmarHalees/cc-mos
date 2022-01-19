@@ -59,7 +59,7 @@ button {
   }
 }
 
-input {
+input[type="range"] {
   &:hover {
     cursor: pointer;
   }

@@ -27,9 +27,15 @@ export default function Search({ results }: { results: string }) {
   }: React.ChangeEvent<HTMLInputElement>) {
     console.log(price);
   }
-  // Format API response
+  // Variables
   const formattedResults: Hotels = formatStringDataToArray(results);
-
+  const filteredResults = formattedResults
+    .filter((hotel) => hotel.name.toLowerCase().includes(query.toLowerCase()))
+    .sort();
+  const searchMetaData = {
+    results: filteredResults.length,
+    prices: filteredResults.map((hotel) => hotel.price),
+  };
   return (
     <div className={styles.container}>
       <aside className={styles.aside}>
@@ -52,13 +58,16 @@ export default function Search({ results }: { results: string }) {
               className={styles.input}
               onChange={handlePriceChange}
               type="range"
+              min={searchMetaData.prices[0]}
+              max={searchMetaData.prices[searchMetaData.prices.length - 1]}
+              step="5"
             />
           </label>
         </div>
       </aside>
       <div className={styles.results}>
         <header className={styles.header}>
-          <strong>Total Nights</strong>
+          <strong>Total Nights {`${searchMetaData.results}`}</strong>
           <div className={styles.buttonContainer}>
             <button
               className={styles.button}
@@ -80,12 +89,8 @@ export default function Search({ results }: { results: string }) {
         </header>
 
         <main className={styles.main}>
-          {formattedResults
-            .filter((hotel) =>
-              hotel.name.toLowerCase().includes(query.toLowerCase())
-            )
-            .sort()
-            .map(({ name, price, city, available_on }: Hotel, index) => (
+          {filteredResults.map(
+            ({ name, price, city, available_on }: Hotel, index) => (
               <HotelCard
                 available_on={available_on}
                 key={index}
@@ -93,7 +98,8 @@ export default function Search({ results }: { results: string }) {
                 price={price}
                 city={city}
               />
-            ))}
+            )
+          )}
         </main>
       </div>
     </div>
