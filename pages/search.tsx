@@ -1,9 +1,17 @@
 import styles from "../styles/Search.module.scss";
 import { GetServerSideProps } from "next";
 import axios from "axios";
+import { formatStringDataToArray } from "../utils/helpers";
+import { Hotel, Hotels } from "../utils/types";
+import HotelCard from "../components/custom-comp/HotelCard/HotelCard";
 
 export default function search({ results }: { results: string }) {
-  console.log(results.split(" ").join().split("\n"));
+  // function filterHotelsArrayBasedOnActiveFilters(formattedResults) {
+
+  // }
+  const formattedResults: Hotels = formatStringDataToArray(results);
+  // const filteredArray =
+  //   filterHotelsArrayBasedOnActiveFilters(formattedResults);
 
   return (
     <div className={styles.container}>
@@ -11,7 +19,19 @@ export default function search({ results }: { results: string }) {
       <div className={styles.results}>
         <header>filters</header>
 
-        <main className={styles.main}>main</main>
+        <main className={styles.main}>
+          {formattedResults.map(
+            ({ name, price, city, available_on }: Hotel, index) => (
+              <HotelCard
+                available_on={available_on}
+                key={index}
+                name={name}
+                price={price}
+                city={city}
+              />
+            )
+          )}
+        </main>
       </div>
     </div>
   );

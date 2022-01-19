@@ -2,14 +2,19 @@
   display: grid;
   grid-template-columns: 1fr 2fr;
   min-height: 100vh;
-
+  max-width: 1000px;
+  margin: auto;
   .results {
     display: grid;
     place-items: center;
-    background: red;
+
     grid-template-rows: 100px 1fr;
     .main {
       align-self: start;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      width: 100%;
     }
   }
 
