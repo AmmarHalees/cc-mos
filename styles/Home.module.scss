@@ -1,3 +1,8 @@
 .home {
-  background: red;
+  min-height: 100vh;
+  display: grid;
+  place-items: center;
+  .onboarding {
+    background: red;
+  }
 }
