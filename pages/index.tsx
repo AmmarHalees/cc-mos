@@ -37,14 +37,14 @@ const Home: NextPage = () => {
 
       <main className={styles.home}>
         <div className={styles.onboarding}>
-          <form onSubmit={handleSubmit}>
-            <label>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <label className={styles.label}>
               <div>From</div>
-              <input name="from" type="date" />
+              <input className={styles.input} name="from" type="date" />
             </label>
-            <label>
+            <label className={styles.label}>
               <div>To</div>
-              <input name="to" type="date" />
+              <input className={styles.input} name="to" type="date" />
             </label>
             <button type="submit">Search</button>
           </form>

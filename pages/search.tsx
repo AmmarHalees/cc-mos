@@ -33,10 +33,12 @@ export default function Search({ results }: { results: string }) {
   }
   // Variables
   const formattedResults: Hotels = formatStringDataToArray(results);
+
   const filteredResults = formattedResults
     .filter((hotel) => hotel.name.toLowerCase().includes(query.toLowerCase()))
     .filter((hotel) => Number(price) < Number(hotel.price))
     .sort(mapSortTypeToCompareFunction[sort]);
+
   const searchMetaData = {
     results: filteredResults.length,
     prices: formattedResults.map((hotel) => hotel.price),
@@ -51,7 +53,7 @@ export default function Search({ results }: { results: string }) {
             className={styles.input}
             onChange={handleQueryChange}
             placeholder="Hotel Name"
-            type="text"
+            type="search"
           />
         </div>
         <div>

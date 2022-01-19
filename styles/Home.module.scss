@@ -3,6 +3,21 @@
   display: grid;
   place-items: center;
   .onboarding {
-    background: red;
+    .form {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 3rem;
+      align-items: center;
+      .label {
+        display: grid;
+        grid-template-columns: auto auto;
+        gap: 1rem;
+        align-items: center;
+        .input {
+          padding: 0.5rem;
+          border: 2px solid black;
+        }
+      }
+    }
   }
 }
