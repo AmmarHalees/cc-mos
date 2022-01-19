@@ -12,6 +12,10 @@ export default function Search({ results }: { results: string }) {
   function handleSort(sort: string) {
     setSort(sort);
   }
+  const mapSortTypeToCompareFunction = {
+    price: (a: Hotel, b: Hotel) => Number(a.price) - Number(b.price),
+    name: (a: Hotel, b: Hotel) => a.name.localeCompare(b.name),
+  };
 
   // Query
   const [query, setQuery] = useState("");
@@ -25,16 +29,17 @@ export default function Search({ results }: { results: string }) {
   function handlePriceChange({
     target: { value: price },
   }: React.ChangeEvent<HTMLInputElement>) {
-    console.log(price);
+    setPrice(price);
   }
   // Variables
   const formattedResults: Hotels = formatStringDataToArray(results);
   const filteredResults = formattedResults
     .filter((hotel) => hotel.name.toLowerCase().includes(query.toLowerCase()))
-    .sort();
+    .filter((hotel) => Number(price) < Number(hotel.price))
+    .sort(mapSortTypeToCompareFunction[sort]);
   const searchMetaData = {
     results: filteredResults.length,
-    prices: filteredResults.map((hotel) => hotel.price),
+    prices: formattedResults.map((hotel) => hotel.price),
   };
   return (
     <div className={styles.container}>
@@ -52,7 +57,7 @@ export default function Search({ results }: { results: string }) {
         <div>
           {" "}
           <label>
-            <h3>Price Filter</h3>
+            <h3 className="text-left">Price Filter</h3>
             <input
               name="pricerange"
               className={styles.input}
@@ -62,6 +67,7 @@ export default function Search({ results }: { results: string }) {
               max={searchMetaData.prices[searchMetaData.prices.length - 1]}
               step="5"
             />
+            {`${price.length > 0 ? `More than ${price}` : ""}`}
           </label>
         </div>
       </aside>
