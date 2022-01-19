@@ -36,21 +36,22 @@ export default function Search({ results }: { results: string }) {
   const {
     query: { from, to },
   } = useRouter();
+  const lowestDateTimeStamp: number = new Date(from as string).getTime();
+  const upperDateTimeStamp: number = new Date(to as string).getTime();
+
   const formattedResults: Hotels = formatStringDataToArray(results);
   const filteredResults = formattedResults
     .filter(
       (hotel) =>
-        new Date(hotel.available_on).getTime() >
-          new Date(from as string).getTime() &&
-        new Date(hotel.available_on).getTime() <
-          new Date(to as string).getTime()
+        new Date(hotel.available_on).getTime() > lowestDateTimeStamp &&
+        new Date(hotel.available_on).getTime() < upperDateTimeStamp
     )
     .filter((hotel) => hotel.name.toLowerCase().includes(query.toLowerCase()))
     .filter((hotel) => Number(price) < Number(hotel.price))
     .sort(mapSortTypeToCompareFunction[sort]);
 
-  console.log(formattedResults.map((x) => new Date(x.available_on).getTime()));
-  console.log(new Date(from as string).getTime());
+  console.log(formattedResults.map((x) => x.available_on));
+  console.log(from);
   const searchMetaData = {
     results: filteredResults.length,
     prices: formattedResults.map((hotel) => hotel.price),
