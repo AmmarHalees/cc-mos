@@ -49,3 +49,12 @@ ul {
   min-width: 19rem;
   max-width: 120rem;
 }
+
+button {
+  background: white;
+  border: 1px solid black;
+  padding: 1rem;
+  &:hover {
+    cursor: pointer;
+  }
+}
