@@ -5,6 +5,7 @@ import { formatStringDataToArray } from "../utils/helpers";
 import { Hotel, Hotels } from "../utils/types";
 import HotelCard from "../components/custom-comp/HotelCard/HotelCard";
 import { useEffect, useState } from "react";
+import { useRouter } from "next/router";
 
 export default function Search({ results }: { results: string }) {
   // Sort:
@@ -12,7 +13,7 @@ export default function Search({ results }: { results: string }) {
   function handleSort(sort: string) {
     setSort(sort);
   }
-  const mapSortTypeToCompareFunction = {
+  const mapSortTypeToCompareFunction: any = {
     price: (a: Hotel, b: Hotel) => Number(a.price) - Number(b.price),
     name: (a: Hotel, b: Hotel) => a.name.localeCompare(b.name),
   };
@@ -32,13 +33,24 @@ export default function Search({ results }: { results: string }) {
     setPrice(price);
   }
   // Variables
+  const {
+    query: { from, to },
+  } = useRouter();
   const formattedResults: Hotels = formatStringDataToArray(results);
-
   const filteredResults = formattedResults
+    .filter(
+      (hotel) =>
+        new Date(hotel.available_on).getTime() >
+          new Date(from as string).getTime() &&
+        new Date(hotel.available_on).getTime() <
+          new Date(to as string).getTime()
+    )
     .filter((hotel) => hotel.name.toLowerCase().includes(query.toLowerCase()))
     .filter((hotel) => Number(price) < Number(hotel.price))
     .sort(mapSortTypeToCompareFunction[sort]);
 
+  console.log(formattedResults.map((x) => new Date(x.available_on).getTime()));
+  console.log(new Date(from as string).getTime());
   const searchMetaData = {
     results: filteredResults.length,
     prices: formattedResults.map((hotel) => hotel.price),
@@ -117,7 +129,6 @@ export default function Search({ results }: { results: string }) {
 export const getServerSideProps: GetServerSideProps = async (context) => {
   const res = await axios.get(`${process.env.API_URL}`);
   let results = res.data;
-
   return {
     props: { results }, // will be passed to the page component as props
   };
