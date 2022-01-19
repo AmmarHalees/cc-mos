@@ -50,8 +50,6 @@ export default function Search({ results }: { results: string }) {
     .filter((hotel) => Number(price) < Number(hotel.price))
     .sort(mapSortTypeToCompareFunction[sort]);
 
-  console.log(formattedResults.map((x) => x.available_on));
-  console.log(from);
   const searchMetaData = {
     results: filteredResults.length,
     prices: formattedResults.map((hotel) => hotel.price),
