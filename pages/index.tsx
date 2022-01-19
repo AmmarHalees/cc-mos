@@ -1,8 +1,32 @@
 import type { NextPage } from "next";
 import Head from "next/head";
+import { useRouter } from "next/router";
 import styles from "../styles/Home.module.scss";
 
 const Home: NextPage = () => {
+  const { push } = useRouter();
+
+  function handleSetFilters(from: string, to: string) {
+    push({
+      pathname: "/search/",
+      query: {
+        from,
+        to,
+      },
+    });
+  }
+
+  function handleSubmit(e: React.SyntheticEvent) {
+    e.preventDefault();
+    const target = e.target as typeof e.target & {
+      from: { value: string };
+      to: { value: string };
+    };
+    const from = target.from.value;
+    const to = target.to.value;
+
+    handleSetFilters(from, to);
+  }
   return (
     <div className={styles.home}>
       <Head>
@@ -12,7 +36,19 @@ const Home: NextPage = () => {
       </Head>
 
       <main className={styles.home}>
-        <div className={styles.onboarding}>onboarding</div>
+        <div className={styles.onboarding}>
+          <form onSubmit={handleSubmit}>
+            <label>
+              <div>From</div>
+              <input name="from" type="date" />
+            </label>
+            <label>
+              <div>To</div>
+              <input name="to" type="date" />
+            </label>
+            <button type="submit">Search</button>
+          </form>
+        </div>
       </main>
     </div>
   );
